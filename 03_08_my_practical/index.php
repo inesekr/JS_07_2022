@@ -32,19 +32,7 @@ if (isset($_POST["csvFilePath"]))
             <button class="btn btn-primary">Migrate data from CSV file</button>
         </form>
 
-        <?php while ($entry = $records->fetch_assoc()) : ?>
-        <div class="row">
-            <div class="col">
-                <?= $entry["title"] ?>
-            </div>
-            <div class="col">
-                <?= $entry["author"] ?>
-            </div>
-            <div class="col">
-                <?= $entry["pages"] ?>
-            </div>
-        </div>
-        <?php endwhile; ?>
+
 
         <form method="POST">
             <input value=".csv" name="csvFilePath">
