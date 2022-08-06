@@ -82,3 +82,71 @@ function saveRecordsToCSVFile(string $filename, mysqli $con)
     fwrite($file, $filecontent);
     fclose($file);
 }
+
+
+
+function saveRecordsToJSONFile(string $filename, mysqli_result $records)
+{
+    $recordsArr = array();
+    while ($entry = $records->fetch_assoc()) :
+        $recordArr = array(
+            "title" => $entry["title"],
+            "author" => $entry["author"],
+            "pages" => $entry["pages"]
+        );
+        array_push($recordsArr, $recordArr); //push $recordArr to $recordsArr
+    endwhile;
+    $json = json_encode(array("records" => $recordsArr), JSON_PRETTY_PRINT);
+    file_put_contents($filename, $json);
+}
+
+function insertRecordsFromJSONFile(string $filename, mysqli $con)
+{
+    $filecontent = file_get_contents($filename);
+    $recordsArr = json_decode($filecontent);
+    foreach ($recordsArr->records as $record) :
+        createRecord($con, $record->title, $record->author, $record->pages);
+    endforeach;
+}
+
+function insertRecordsFromXMLFile(string $filename)
+{
+    $err = "";
+    $con = connectToDB($err);
+    if ($err !== "")
+        exit();
+    $xmlDoc = new DOMDocument();
+    $xmlDoc->load($filename);
+
+    $records = $xmlDoc->documentElement->getElementsByTagName("record"); //root element
+    foreach ($records as $record) :
+        $title =  $record->getElementsByTagName("title")->item(0)->nodeValue;
+        $author = $record->getElementsByTagName("author")->item(0)->nodeValue;
+        $pages = $record->getElementsByTagName("pages")->item(0)->nodeValue;
+        createRecord($con, $title, $author, $pages);
+    endforeach;
+}
+
+function saveRecordsToXMLFile(string $filename, mysqli_result $records)
+{
+    $xmlDoc = new DOMDocument();
+    $xmlDoc->encoding = "UTF-8";
+    $xmlDoc->formatOutput = true;
+    $recordsElement = $xmlDoc->createElement("records");
+    while ($entry = $records->fetch_assoc()) :
+        $recordElement = $xmlDoc->createElement("record");
+
+        $titleElement = $xmlDoc->createElement("title", $entry["title"]);
+        $recordElement->appendChild($titleElement);
+
+        $authorElement = $xmlDoc->createElement("author", $entry["author"]);
+        $recordElement->appendChild($authorElement);
+
+        $pagesElement = $xmlDoc->createElement("pages", $entry["pages"]);
+        $recordElement->appendChild($pagesElement);
+
+        $recordsElement->appendChild($recordElement);
+    endwhile;
+    $xmlDoc->appendChild($recordsElement);
+    $xmlDoc->save($filename);
+}
