@@ -1,4 +1,5 @@
 <?php
+include("header.php");
 include("functions.php");
 $err = "";
 $con = connectToDB($err);

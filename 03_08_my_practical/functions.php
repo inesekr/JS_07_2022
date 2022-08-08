@@ -96,7 +96,10 @@ function saveRecordsToJSONFile(string $filename, mysqli_result $records)
         );
         array_push($recordsArr, $recordArr); //push $recordArr to $recordsArr
     endwhile;
+    // mb_convert_encoding($filename, 'HTML-ENTITIES', "UTF-8");
     $json = json_encode(array("records" => $recordsArr), JSON_PRETTY_PRINT);
+    // $json = json_encode(array("records" => $recordsArr), JSON_PRETTY_PRINT);
+
     file_put_contents($filename, $json);
 }
 
