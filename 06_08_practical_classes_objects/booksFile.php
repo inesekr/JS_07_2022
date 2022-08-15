@@ -1,9 +1,8 @@
 <?php
 include("utils.php");
 include("book.php");
-include("header.php");
 $err = "";
-$con = Utilities::connectToDB($err);
+$con = Utilities::connectToDb($err);
 $books;
 if ($err === "")
     $books = book::selectBooks($con);
@@ -74,15 +73,15 @@ if (isset($_POST["jsonFilePath"]))
         endforeach; ?>
         <form method="POST">
             <input value=".xml" name="xmlFilePath">
-            <button class="btn">Save to XML</button>
+            <button class="btn btn-primary">Save to XML</button>
         </form>
         <form method="POST">
             <input value=".json" name="jsonFilePath">
-            <button class="btn">Save to JSON</button>
+            <button class="btn btn-primary">Save to JSON</button>
         </form>
         <form method="POST">
             <input value=".csv" name="csvFilePath">
-            <button class="btn">Save to CSV</button>
+            <button class="btn btn-primary">Save to CSV</button>
         </form>
     </div>
 </body>

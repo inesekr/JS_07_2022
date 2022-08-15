@@ -6,7 +6,7 @@ class Book
 
 
 
-    public function getBooksFromDB(): array
+    public function getBook(): array
     {
 
         return [
@@ -15,17 +15,6 @@ class Book
             "pages" => $this->pages
         ];
     }
-    // $query = "SELECT * FROM books";
-    // $result = $con->query($query);
-    // while ($resultRow = $result->fetch_assoc()) {
-    //     $book = new Book(
-    //         $title = $resultRow["title"],
-    //         $author = $resultRow["author"],
-    //         $pages = $resultRow["pages"]
-    //     );
-    //     array_push($books, $book);
-    // }
-    // return $books;
 
     public function getTitle(): string
     {
