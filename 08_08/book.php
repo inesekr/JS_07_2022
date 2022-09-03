@@ -53,11 +53,12 @@ class Book
         return $books;
     }
 
+
     public static function convertBooksToTextArray(array $books): array
     {
         $booksArr = [];
         foreach ($books as $bookObj)
-            array_push($booksArr, $bookObj->getBooks());
+            array_push($booksArr, $bookObj->getBook());
         return $booksArr;
     }
 
@@ -107,6 +108,28 @@ class Book
         file_put_contents($filename, $json);
     }
 
+    public static function generateBooksTableHTML($books): string
+    {
+        $booksTable =
+            "<b>
+            <div class='row'>
+                <div class='col'>
+                    Title
+                </div>
+                <div class='col'>
+                    Author
+                </div>
+                <div class='col'>
+                    Pages
+                </div>
+            </div>
+        </b>";
+        foreach ($books as $book) :
+            $booksTable .= $book->getBookRow();
+        endforeach;
+        return $booksTable;
+    }
+
     public function getBookRow()
     {
         return "<div class='row'>
@@ -116,6 +139,6 @@ class Book
             "</div>
     <div class='col'>" . $this->pages .
             "</div>
-    </div>";
+</div>";
     }
 }
