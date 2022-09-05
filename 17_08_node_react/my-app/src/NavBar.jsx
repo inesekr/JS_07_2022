@@ -1,16 +1,14 @@
 function NavBar({ openPage }) {
-    const openPageLocal = page => {
-        openPage(page);
-    }
+
     return (
-        < nav className="navbar navbar-expand-lg navbar-light bg-light" >
-            <div className="collapse navbar-collapse" id="navbarSupportedContent">
+        < nav className="navbar navbar-expand navbar-light bg-light" >
+            <div className="collapse navbar-collapse">
                 <ul className="navbar-nav mr-auto">
                     <li className="nav-item active">
-                        <a className="nav-link" ><button className="btn" onClick={openPageLocal("HomePage")}>Home</button></a>
+                        <button className="btn" onClick={() => openPage("HomePage")}>Home</button>
                     </li>
                     <li className="nav-item">
-                        <a className="nav-link"><button className="btn" onClick={openPageLocal("LoadPage")}>LoadPage</button></a>
+                        <button className="btn" onClick={() => openPage("LoadPage")}>LoadPage</button>
                     </li>
                 </ul>
             </div>

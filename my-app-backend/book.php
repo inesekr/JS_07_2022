@@ -146,7 +146,6 @@ class Book
         endforeach;
     }
 
-
     public static function convertFromJSONToBook($book): Book
     {
         return new Book($book->title, $book->author, $book->pages, $book->id);
@@ -208,5 +207,60 @@ class Book
     <div class='col'>" . $this->pages .
             "</div>
 </div>";
+    }
+
+    public static function getBooksFromJSON(string $filename): string
+    {
+        $filecontent = file_get_contents($filename);
+        // $booksObj = json_decode($filecontent);
+        return $filecontent;
+    }
+
+    public static function getBooksFromXML(string $filename): string
+    {
+        $xmlDoc = new DOMDocument();
+        $xmlDoc->load($filename);
+        $booksArr = [];
+
+        $books = $xmlDoc->documentElement->getElementsByTagName("book"); //root element
+        foreach ($books as $book) :
+            $title =  $book->getElementsByTagName("title")->item(0)->nodeValue;
+            $author = $book->getElementsByTagName("author")->item(0)->nodeValue;
+            $pages = $book->getElementsByTagName("pages")->item(0)->nodeValue;
+            // createBook($con, $title, $author, $pages);
+            $bookObj = new Book($title, $author, $pages);
+            array_push($booksArr, $bookObj);
+        endforeach;
+
+        return json_encode(array("books" => Book::convertBooksArrToJSON($booksArr)));
+    }
+
+    public static function getBooksFromCSV(string $filename): string
+    {
+        $booksArr = [];
+        // $filename = 'files\\' . $filename;
+        $file = fopen($filename, "r");
+        if ($file == false) {
+            exit();
+        }
+
+        // $err = "";
+        // $con = connectToDB($err);
+        // if ($err !== "")
+        //     exit();
+
+        //We skip the header line
+        $csvContentLineArr = fgetcsv($file, filesize($filename), ";");
+
+        while ($csvContentLineArr = fgetcsv($file, filesize($filename), ";")) :
+
+            $title = $csvContentLineArr[0];
+            $author = $csvContentLineArr[1];
+            $pages = $csvContentLineArr[2];
+            $bookObj = new Book($title, $author, $pages);
+            array_push($booksArr, $bookObj);
+
+        endwhile;
+        return json_encode(array("books" => Book::convertBooksArrToJSON($booksArr)));
     }
 }
