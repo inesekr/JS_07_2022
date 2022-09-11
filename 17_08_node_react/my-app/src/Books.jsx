@@ -11,7 +11,8 @@ class Books extends React.Component {
             booksToUpdate: [],
             numberOfPages: 0,
             currentPage: 1,
-            booksShown: []
+            booksShown: [],
+            user: JSON.parse(sessionStorage.getItem("user"))
         }
         // this.booksInit();
         // this.booksInit = this.props.dataInit;
@@ -188,9 +189,14 @@ class Books extends React.Component {
                         {this.generatePageItems()}
                     </ul>
                 </nav>
-                <button className="btn btn-primary" type="button" onClick={this.setEditable}>Edit</button>
-                <button className="btn btn-primary" type="button" onClick={() => { this.onChangeSave() }}>Save</button>
-                <button className="btn btn-primary" type="button" onClick={this.onCancel}>Cancel</button>
+                {this.state.user.roleID === 1
+                    &&
+                    <div>
+                        <button className="btn btn-primary" type="button" onClick={this.setEditable}>Edit</button>
+                        <button className="btn btn-primary" type="button" onClick={() => { this.onChangeSave() }}>Save</button>
+                        <button className="btn btn-primary" type="button" onClick={this.onCancel}>Cancel</button>
+                    </div>
+                }
                 <table>
                     <thead>
                         <tr>
